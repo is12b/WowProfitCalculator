@@ -43,10 +43,10 @@ public class Main extends JFrame {
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		
 		JPanel panel = new JPanel();
-		tabbedPane.addTab("New tab", null, panel, null);
+		tabbedPane.addTab("Main", null, panel, null);
 		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("New tab", null, panel_1, null);
+		JPanel herb = new HerbPanel();
+		tabbedPane.addTab("Herbs", null, herb, null);
 		
 		JPanel pigment = new PigmentPanel();
 		tabbedPane.addTab("Pigments", null, pigment, null);

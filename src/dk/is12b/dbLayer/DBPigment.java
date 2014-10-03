@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import dk.is12b.modelLayer.Herb;
 import dk.is12b.modelLayer.Pigment;
 
 public class DBPigment {
@@ -23,6 +22,7 @@ public class DBPigment {
 		try {
 			int id = DBGetMax.getMaxId("SELECT MAX(ID) FROM PIGMENT");
 	        id = id + 1;
+	        p.setId(id);
 			stmt = c.createStatement();
 			String sql = "INSERT INTO PIGMENT (ID,NAME,CHANCETO,CHANCEOFF,MIN,PERCENT) " +
 	                   "VALUES (" + id + ", '" + p.getName()  + "', " + p.getChanceTo() + ", " + p.getChanceOff() + ", " + p.getMin() + ", " + p.getPercent() + " );"; 
@@ -61,7 +61,7 @@ public class DBPigment {
 		return pigments;
 	}
 
-	public void updatePigment(Pigment p) {
+	public void updatePigment(Pigment p, String name, int chanceTo, int chanceOff, int min, int percent) {
 		DBConnection dbCon = DBConnection.getInstance();
 		Connection c = dbCon.getConnection();
 		
@@ -70,12 +70,13 @@ public class DBPigment {
 		try{
 			stmt = c.createStatement();
 			String sql = "UPDATE PIGMENT "
-					   + "SET NAME = '" + p.getName() + ", " 
-					   + "SET CHANCETO = " + p.getChanceTo() + ", "
-					   + "SET CHANCEOFF = " + p.getChanceOff() + ", "
-					   + "SET MIN = " + p.getMin() + ", "
-					   + "SET PERCENT = " + p.getPercent() 
-					   + "WHERE ID = " + p.getId();
+					   + "SET NAME = '" + name + "', " 
+					   + "CHANCETO = " + chanceTo + ", "
+					   + "CHANCEOFF = " + chanceOff + ", "
+					   + "MIN = " + min + ", "
+					   + "PERCENT = " + percent + " "
+					   + "WHERE ID = " + p.getId() + ";";
+			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			stmt.close();
 		}catch(Exception e){
@@ -97,6 +98,31 @@ public class DBPigment {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	public Pigment getPigment(int id) {
+		Pigment pigment = null;
+		DBConnection dbCon = DBConnection.getInstance();
+		Connection c = dbCon.getConnection();
+		
+		Statement stmt;
+		
+		try {
+			stmt = c.createStatement();
+			String sql = "SELECT * FROM PIGMENT WHERE ID = " + id;
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			if(rs.next()){
+				pigment = new Pigment(rs.getString("NAME"), rs.getInt("CHANCETO"), rs.getInt("CHANCEOFF"), rs.getInt("MIN"), rs.getInt("PERCENT"));
+				pigment.setId(rs.getInt("ID"));
+			}
+			
+			stmt.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return pigment;
 	}
 
 }

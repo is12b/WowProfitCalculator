@@ -23,13 +23,18 @@ import javax.swing.border.TitledBorder;
 
 import java.awt.GridLayout;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.ListModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 public class PigmentPanel extends JPanel {
 	private JTextField txtName;
@@ -38,11 +43,16 @@ public class PigmentPanel extends JPanel {
 	private JTextField txtChanceOff;
 	private JTextField txtChanceTo;
 	private Pigment selectedPigment;
+	private PigmentCtr pCtr;
+	private JList list;
+	private JPanel panel_1;
+	private DefaultListModel model;
 
 	/**
 	 * Create the panel.
 	 */
 	public PigmentPanel() {
+		pCtr = new PigmentCtr();
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 232, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0};
@@ -50,17 +60,22 @@ public class PigmentPanel extends JPanel {
 		gridBagLayout.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-		JPanel panel_2 = new JPanel();
-		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
-		gbc_panel_2.insets = new Insets(0, 0, 0, 5);
-		gbc_panel_2.fill = GridBagConstraints.BOTH;
-		gbc_panel_2.gridx = 0;
-		gbc_panel_2.gridy = 0;
-		add(panel_2, gbc_panel_2);
-		panel_2.setLayout(new BorderLayout(0, 0));
+		panel_1 = new JPanel();
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 0;
+		gbc_panel_1.gridy = 0;
+		add(panel_1, gbc_panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
 		
-		JList list = new JList();
-		panel_2.add(list, BorderLayout.CENTER);
+		list = new JList(createModel());
+		list.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				selectionChange();
+			}
+		});
+		panel_1.add(list, BorderLayout.CENTER);
 		
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -181,8 +196,7 @@ public class PigmentPanel extends JPanel {
 		JButton btnCreate = new JButton("Create");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PigmentCtr pCtr = new PigmentCtr();
-				pCtr.createPigment(txtName.getText(), Integer.parseInt(txtChanceTo.getText()), Integer.parseInt(txtChanceOff.getText()), Integer.parseInt(txtMin.getText()), Integer.parseInt(txtPercent.getText()));
+				create();
 			}
 		});
 		panel_6.add(btnCreate, "2, 2");
@@ -214,17 +228,46 @@ public class PigmentPanel extends JPanel {
 
 	}
 
+	private ListModel createModel() {
+		model = new DefaultListModel();
+		ArrayList<Pigment> pigments = pCtr.getAllPigments();
+		for(Pigment p : pigments){
+			model.addElement(p);
+		}
+		
+		return model;
+	}
+
+	protected void selectionChange() {
+		selectedPigment = (Pigment) list.getSelectedValue();
+		if(selectedPigment != null){
+			txtChanceOff.setText(String.valueOf(selectedPigment.getChanceOff()));
+			txtChanceTo.setText(String.valueOf(selectedPigment.getChanceTo()));
+			txtMin.setText(String.valueOf(selectedPigment.getMin()));
+			txtName.setText(selectedPigment.getName());
+			txtPercent.setText(String.valueOf(selectedPigment.getPercent()));
+		}
+	}
+
+	protected void create() {
+		if(checkValues()){
+			model.addElement(pCtr.createPigment(txtName.getText(), Integer.parseInt(txtChanceTo.getText()), Integer.parseInt(txtChanceOff.getText()), Integer.parseInt(txtMin.getText()), Integer.parseInt(txtPercent.getText())));
+		}
+	}
+
 	protected void delete() {
 		if(selectedPigment != null){
-			PigmentCtr pCtr = new PigmentCtr();
 			pCtr.deletePigment(selectedPigment);
+			model.removeElement(selectedPigment);
 		}
 	}
 
 	protected void update() {
 		if(selectedPigment != null){
-			PigmentCtr pCtr = new PigmentCtr();
-			pCtr.updatePigment(selectedPigment);
+			if(checkValues()){
+				pCtr.updatePigment(selectedPigment, txtName.getText(), Integer.parseInt(txtChanceTo.getText()), Integer.parseInt(txtChanceOff.getText()), Integer.parseInt(txtMin.getText()), Integer.parseInt(txtPercent.getText()));
+				list.repaint();
+			}
 		}
 	}
 
@@ -235,5 +278,24 @@ public class PigmentPanel extends JPanel {
 		txtMin.setText("");
 		txtName.setText("");
 		txtPercent.setText("");
+	}
+	
+	protected boolean checkValues(){
+		boolean retBool = true;
+		
+		try{
+			if(txtName.getText().isEmpty() || txtName.getText() == null){
+				retBool = false;
+			}else{
+				Integer.parseInt(txtChanceTo.getText());
+				Integer.parseInt(txtChanceOff.getText());
+				Integer.parseInt(txtMin.getText()) ;
+				Integer.parseInt(txtPercent.getText());
+			}
+		}catch(Exception e){
+			retBool = false;
+		}
+		
+		return retBool;
 	}
 }

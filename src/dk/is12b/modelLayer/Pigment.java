@@ -9,14 +9,16 @@ public class Pigment {
 	private int chanceTo;
 	private int chanceOff;
 	private int min;
-	private double percent;
+	private int percent;
+	private double per;
 	
-	public Pigment(String name, int chanceTo, int chanceOff, int min, double percent){
+	public Pigment(String name, int chanceTo, int chanceOff, int min, int percent){
 		this.name = name;
 		this.chanceTo = chanceTo;
 		this.chanceOff = chanceOff;
 		this.min = min;
-		this.percent = (percent / 100);
+		this.percent = percent;
+		this.per = (percent / 100);
 	}
 	
 	private int getChanceRand(){
@@ -121,27 +123,37 @@ public class Pigment {
 	/**
 	 * @return the percent
 	 */
-	public double getPercent() {
+	public int getPercent() {
 		return percent;
 	}
 
 	/**
 	 * @param percent the percent to set
 	 */
-	public void setPercent(double percent) {
+	public void setPercent(int percent) {
 		this.percent = percent;
+	}	
+
+	/**
+	 * @return the per
+	 */
+	public double getPer() {
+		return per;
 	}
-	
-	
+
+	/**
+	 * @param per the per to set
+	 */
+	public void setPer(double per) {
+		this.per = per;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Pigment [id=" + id + ", name=" + name + ", chanceTo="
-				+ chanceTo + ", chanceOff=" + chanceOff + ", min=" + min
-				+ ", percent=" + percent + "]";
+		return name;
 	}
 
 		

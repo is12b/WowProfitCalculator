@@ -1,4 +1,6 @@
 import dk.is12b.ctrLayer.PigmentCtr;
+import dk.is12b.dbLayer.DBConnection;
+import dk.is12b.dbLayer.DBHerb;
 import dk.is12b.modelLayer.Herb;
 import dk.is12b.modelLayer.Pigment;
 
@@ -10,21 +12,10 @@ public class Test {
 	}
 	
 	public Test(){
-		Pigment p = new Pigment("Shadow Pigment", 2, 4, 2, 100);
-		Pigment p1 = new Pigment("Misty Pigment", 3, 3, 0, 50);
+		DBHerb db = new DBHerb();
 		
-		Herb h = new Herb("Fool's Cap");
-		
-		h.addPigment(p);
-		h.addPigment(p1);
-		
-		System.out.println(h.getName());
-		System.out.println("Shadow Pigment: " + h.getRes(60, "Shadow Pigment"));
-		System.out.println("Misty Pigment: " + h.getRes(60, "Misty Pigment"));
-		
-		//System.out.println(p.getChanceRand());
-		
-		PigmentCtr pCtr = new PigmentCtr();
-		pCtr.createPigment("hi", 1, 2, 3, 50);
+		for(Herb h : db.getAllHerbs()){
+			System.out.println(h.getName());
+		}
 	}
 }

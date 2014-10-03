@@ -8,11 +8,13 @@ public class DBConnection {
 	private static DBConnection instance;
 	
 	private DBConnection(){
-		boolean exist = true;
+		/*
+		boolean exist = false;
 		File f = new File("/WoWProfitCalculator.db");
 		if(!f.exists()){
 			exist = false;
 		}
+		*/
 		c = null;
 	    try {
 	      Class.forName("org.sqlite.JDBC");
@@ -23,9 +25,10 @@ public class DBConnection {
 	    }
 	    System.out.println("Opened database successfully");
 	    
-	    if(exist){
-	    	createTables();
-	    }
+	    //if(exist){
+	    //	createPigmentTable();
+	    //	createHerbTable();
+	    //}
 	}
 	
 	public static DBConnection getInstance(){
@@ -40,7 +43,7 @@ public class DBConnection {
 		return c;
 	}
 
-	private void createTables(){
+	private void createPigmentTable(){
 		try {
 		      Statement stmt = c.createStatement();
 		      String pigmentQuery = "CREATE TABLE PIGMENT " +
@@ -50,15 +53,24 @@ public class DBConnection {
 		                   " CHANCEOFF      INT     NOT NULL, " + 
 		                   " MIN            INT     NOT NULL, " +
 		                   " PERCENT        INT     NOT NULL)"; 
-		      
-		      String herbQuery = "CREATE TABLE PIGMENT " +
+		      stmt.executeUpdate(pigmentQuery);
+		      stmt.close();
+		      System.out.println("PigmentTable Created");
+		    } catch ( Exception e ) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		    }
+	}
+	
+	private void createHerbTable(){
+		try {
+		      Statement stmt = c.createStatement();
+		      String herbQuery = "CREATE TABLE HERB " +
 	                   "(ID INT PRIMARY KEY     NOT NULL," +
 	                   " NAME           TEXT    NOT NULL, " + 
 	                   " PIGMENTS       TEXT    NOT NULL)"; 
-		      stmt.executeUpdate(pigmentQuery);
 		      stmt.executeUpdate(herbQuery);
 		      stmt.close();
-		      c.close();
+		      System.out.println("HerbTable Created");
 		    } catch ( Exception e ) {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		    }

@@ -3,6 +3,7 @@ package dk.is12b.modelLayer;
 import java.util.ArrayList;
 
 public class Herb {
+	private int id;
 	private String name;
 	private ArrayList<Pigment> pigments;
 	
@@ -64,6 +65,31 @@ public class Herb {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
+	public ArrayList<Pigment> getPigments() {
+		return pigments;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return name;
+	}
 	
 }
