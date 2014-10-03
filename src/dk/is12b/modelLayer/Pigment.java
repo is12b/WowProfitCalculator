@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Pigment {
+	private int id;
 	private String name;
 	private int chanceTo;
 	private int chanceOff;
@@ -102,6 +103,47 @@ public class Pigment {
 	public void setMin(int min) {
 		this.min = min;
 	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the percent
+	 */
+	public double getPercent() {
+		return percent;
+	}
+
+	/**
+	 * @param percent the percent to set
+	 */
+	public void setPercent(double percent) {
+		this.percent = percent;
+	}
 	
+	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Pigment [id=" + id + ", name=" + name + ", chanceTo="
+				+ chanceTo + ", chanceOff=" + chanceOff + ", min=" + min
+				+ ", percent=" + percent + "]";
+	}
+
+		
 	
 }

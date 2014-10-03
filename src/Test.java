@@ -1,3 +1,4 @@
+import dk.is12b.ctrLayer.PigmentCtr;
 import dk.is12b.modelLayer.Herb;
 import dk.is12b.modelLayer.Pigment;
 
@@ -22,5 +23,8 @@ public class Test {
 		System.out.println("Misty Pigment: " + h.getRes(60, "Misty Pigment"));
 		
 		//System.out.println(p.getChanceRand());
+		
+		PigmentCtr pCtr = new PigmentCtr();
+		pCtr.createPigment("hi", 1, 2, 3, 50);
 	}
 }
