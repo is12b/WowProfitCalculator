@@ -135,4 +135,42 @@ public class DBHerb {
 		}
 	}
 
+	public Herb getHerb(int id) {
+		DBConnection dbCon = DBConnection.getInstance();
+		Connection c = dbCon.getConnection();
+		Herb herb = null;
+		
+		Statement stmt;
+		
+		try {
+			stmt = c.createStatement();
+			String sql = "SELECT * FROM HERB " + 
+						  "WHERE ID = " + id;
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			if(rs.next()){
+				System.out.println("Rs.next ok");
+				herb = new Herb(rs.getString("NAME"));
+				herb.setId(rs.getInt("ID"));
+				String pigments = rs.getString("PIGMENTS");
+				if(!pigments.isEmpty()){
+					System.out.println("Pigments ok");
+					String[] pigsArr = pigments.split(",");
+					DBPigment dbPig = new DBPigment(); 
+					for(String s : pigsArr){
+						Pigment p = dbPig.getPigment(Integer.parseInt(s));
+						herb.addPigment(p);
+					}
+				}
+				
+			}
+			
+			stmt.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return herb;
+	}
+
 }

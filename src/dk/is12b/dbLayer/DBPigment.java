@@ -24,12 +24,12 @@ public class DBPigment {
 	        id = id + 1;
 	        p.setId(id);
 			stmt = c.createStatement();
-			String sql = "INSERT INTO PIGMENT (ID,NAME,CHANCETO,CHANCEOFF,MIN,PERCENT) " +
-	                   "VALUES (" + id + ", '" + p.getName()  + "', " + p.getChanceTo() + ", " + p.getChanceOff() + ", " + p.getMin() + ", " + p.getPercent() + " );"; 
+			String sql = "INSERT INTO PIGMENT (ID,NAME,CHANCETO,CHANCEOFF,PERCENT) " +
+	                   "VALUES (" + id + ", '" + p.getName()  + "', " + p.getChanceTo() + ", " + p.getChanceOff() + ", " + p.getPercent() + " );"; 
 			stmt.executeUpdate(sql);
 			stmt.close();
 			
-			System.out.println("Insert Pigment: " + id + ", '" + p.getName()  + "', " + p.getChanceTo() + ", " + p.getChanceOff() + ", " + p.getMin() + ", " + p.getPercent());
+			System.out.println("Insert Pigment: " + id + ", '" + p.getName()  + "', " + p.getChanceTo() + ", " + p.getChanceOff() + ", " + p.getPercent());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -48,7 +48,7 @@ public class DBPigment {
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			while(rs.next()){
-				Pigment p = new Pigment(rs.getString("NAME"), rs.getInt("CHANCETO"), rs.getInt("CHANCEOFF"), rs.getInt("MIN"), rs.getInt("PERCENT"));
+				Pigment p = new Pigment(rs.getString("NAME"), rs.getInt("CHANCETO"), rs.getInt("CHANCEOFF"), rs.getInt("PERCENT"));
 				p.setId(rs.getInt("ID"));
 				pigments.add(p);
 			}
@@ -61,7 +61,7 @@ public class DBPigment {
 		return pigments;
 	}
 
-	public void updatePigment(Pigment p, String name, int chanceTo, int chanceOff, int min, int percent) {
+	public void updatePigment(Pigment p, String name, int chanceTo, int chanceOff, int percent) {
 		DBConnection dbCon = DBConnection.getInstance();
 		Connection c = dbCon.getConnection();
 		
@@ -73,7 +73,6 @@ public class DBPigment {
 					   + "SET NAME = '" + name + "', " 
 					   + "CHANCETO = " + chanceTo + ", "
 					   + "CHANCEOFF = " + chanceOff + ", "
-					   + "MIN = " + min + ", "
 					   + "PERCENT = " + percent + " "
 					   + "WHERE ID = " + p.getId() + ";";
 			System.out.println(sql);
@@ -113,7 +112,7 @@ public class DBPigment {
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			if(rs.next()){
-				pigment = new Pigment(rs.getString("NAME"), rs.getInt("CHANCETO"), rs.getInt("CHANCEOFF"), rs.getInt("MIN"), rs.getInt("PERCENT"));
+				pigment = new Pigment(rs.getString("NAME"), rs.getInt("CHANCETO"), rs.getInt("CHANCEOFF"), rs.getInt("PERCENT"));
 				pigment.setId(rs.getInt("ID"));
 			}
 			

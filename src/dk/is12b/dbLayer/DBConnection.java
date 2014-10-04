@@ -8,13 +8,13 @@ public class DBConnection {
 	private static DBConnection instance;
 	
 	private DBConnection(){
-		/*
-		boolean exist = false;
-		File f = new File("/WoWProfitCalculator.db");
-		if(!f.exists()){
-			exist = false;
-		}
-		*/
+		
+		//boolean exist = false;
+		//File f = new File("/WoWProfitCalculator.db");
+		//if(!f.exists()){
+		//	exist = false;
+		//}
+		
 		c = null;
 	    try {
 	      Class.forName("org.sqlite.JDBC");
@@ -51,7 +51,6 @@ public class DBConnection {
 		                   " NAME           TEXT    NOT NULL, " + 
 		                   " CHANCETO       INT     NOT NULL, " + 
 		                   " CHANCEOFF      INT     NOT NULL, " + 
-		                   " MIN            INT     NOT NULL, " +
 		                   " PERCENT        INT     NOT NULL)"; 
 		      stmt.executeUpdate(pigmentQuery);
 		      stmt.close();

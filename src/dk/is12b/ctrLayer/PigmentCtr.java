@@ -12,8 +12,8 @@ public class PigmentCtr {
 		dbPigment = new DBPigment();
 	}
 	
-	public Pigment createPigment(String name, int chanceTo, int chanceOff, int min, int percent){
-		Pigment p = new Pigment(name, chanceTo, chanceOff, min, percent);
+	public Pigment createPigment(String name, int chanceTo, int chanceOff, int percent){
+		Pigment p = new Pigment(name, chanceTo, chanceOff, percent);
 		dbPigment.insertPigment(p);
 		return p;
 	}
@@ -22,12 +22,11 @@ public class PigmentCtr {
 		return dbPigment.getAllPigments();
 	}
 	
-	public void updatePigment(Pigment p, String name, int chanceTo, int chanceOff, int min, int percent){
-		dbPigment.updatePigment(p, name, chanceTo, chanceOff, min, percent);
+	public void updatePigment(Pigment p, String name, int chanceTo, int chanceOff, int percent){
+		dbPigment.updatePigment(p, name, chanceTo, chanceOff, percent);
 		p.setName(name);
 		p.setChanceTo(chanceTo);
 		p.setChanceOff(chanceOff);
-		p.setMin(min);
 		p.setPercent(percent);
 	}
 	

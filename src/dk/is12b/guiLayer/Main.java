@@ -42,7 +42,7 @@ public class Main extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		
-		JPanel panel = new JPanel();
+		JPanel panel = new MainTest();
 		tabbedPane.addTab("Main", null, panel, null);
 		
 		JPanel herb = new HerbPanel();

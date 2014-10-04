@@ -8,17 +8,14 @@ public class Pigment {
 	private String name;
 	private int chanceTo;
 	private int chanceOff;
-	private int min;
 	private int percent;
 	private double per;
 	
-	public Pigment(String name, int chanceTo, int chanceOff, int min, int percent){
+	public Pigment(String name, int chanceTo, int chanceOff, int percent){
 		this.name = name;
 		this.chanceTo = chanceTo;
 		this.chanceOff = chanceOff;
-		this.min = min;
 		this.percent = percent;
-		this.per = (percent / 100);
 	}
 	
 	private int getChanceRand(){
@@ -26,7 +23,9 @@ public class Pigment {
 		if(getChancePercent()){
 			Random rand = new Random();
 			int randOf = rand.nextInt(chanceOff) + 1;
-			if(chanceTo >= randOf){
+			if(randOf <= chanceTo){
+				ret = chanceTo;
+			}else{
 				ret = randOf;
 			}
 		}
@@ -34,16 +33,15 @@ public class Pigment {
 	}
 	
 	public int getAmount(){
-		return min + getChanceRand();
+		return getChanceRand();
 	}
 	
 	private boolean getChancePercent(){
 		boolean ret = false;
-		
 		double d = Math.random();
-		if(percent == 1){
+		if(getPer() == 1){
 			ret = true;
-		} else if (d < percent){
+		} else if (d < getPer()){
 		    ret = true;
 		}
 		
@@ -93,20 +91,6 @@ public class Pigment {
 	}
 
 	/**
-	 * @return the min
-	 */
-	public int getMin() {
-		return min;
-	}
-
-	/**
-	 * @param min the min to set
-	 */
-	public void setMin(int min) {
-		this.min = min;
-	}
-
-	/**
 	 * @return the id
 	 */
 	public int getId() {
@@ -138,15 +122,9 @@ public class Pigment {
 	 * @return the per
 	 */
 	public double getPer() {
-		return per;
+		return Double.parseDouble(percent + "") / 100;
 	}
 
-	/**
-	 * @param per the per to set
-	 */
-	public void setPer(double per) {
-		this.per = per;
-	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()

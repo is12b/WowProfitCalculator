@@ -42,24 +42,22 @@ public class NewHerbDialog extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtHerbName;
 	private JTextField txtComPigmentName;
-	private JTextField txtCommonAmount;
-	private JTextField txtCommonChanceOff;
-	private JTextField txtCommonChanceTo;
 	private JTextField txtRarePigmentName;
 	private JTextField txtRareChanceOff;
 	private JTextField txtRareChanceTo;
 	private JTextField txtRareChance;
-	private JCheckBox chkCommonGuaranteed;
-	private JCheckBox chkExtraCommon;
 	private JCheckBox chkPigmentRare;
 	private JLabel lblHerbName;
 	private JLabel lblCommonPigmentName;
-	private JLabel lblCommonAmount;
 	private JLabel lblCommonChanceToOff;
 	private JLabel lblRarePigmentName;
 	private JLabel lblRarePigmentChanceOffTo;
 	private JLabel lblRareChancePercent;
 	private HerbPanel parent;
+	private JPanel panel_1;
+	private JTextField txtCommonOff;
+	private JLabel lblNewLabel;
+	private JTextField txtCommonTo;
 
 	/**
 	 * Create the dialog.
@@ -72,9 +70,9 @@ public class NewHerbDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[]{0, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPanel.rowHeights = new int[]{0, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JPanel panel = new JPanel();
@@ -111,25 +109,6 @@ public class NewHerbDialog extends JDialog {
 			txtHerbName.setColumns(10);
 		}
 		{
-			lblCommonPigmentName = new JLabel("What is the name of the common Pigment?");
-			GridBagConstraints gbc_lblCommonPigmentName = new GridBagConstraints();
-			gbc_lblCommonPigmentName.anchor = GridBagConstraints.WEST;
-			gbc_lblCommonPigmentName.insets = new Insets(0, 0, 5, 5);
-			gbc_lblCommonPigmentName.gridx = 0;
-			gbc_lblCommonPigmentName.gridy = 2;
-			contentPanel.add(lblCommonPigmentName, gbc_lblCommonPigmentName);
-		}
-		{
-			txtComPigmentName = new JTextField();
-			GridBagConstraints gbc_txtComPigmentName = new GridBagConstraints();
-			gbc_txtComPigmentName.insets = new Insets(0, 0, 5, 0);
-			gbc_txtComPigmentName.fill = GridBagConstraints.HORIZONTAL;
-			gbc_txtComPigmentName.gridx = 1;
-			gbc_txtComPigmentName.gridy = 2;
-			contentPanel.add(txtComPigmentName, gbc_txtComPigmentName);
-			txtComPigmentName.setColumns(10);
-		}
-		{
 			JLabel lblAreTheyGuaranteed = new JLabel("");
 			GridBagConstraints gbc_lblAreTheyGuaranteed = new GridBagConstraints();
 			gbc_lblAreTheyGuaranteed.insets = new Insets(0, 0, 5, 5);
@@ -138,106 +117,62 @@ public class NewHerbDialog extends JDialog {
 			contentPanel.add(lblAreTheyGuaranteed, gbc_lblAreTheyGuaranteed);
 		}
 		{
-			chkCommonGuaranteed = new JCheckBox("Are they guaranteed drop? Yes/No");
-			chkCommonGuaranteed.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					if(chkCommonGuaranteed.isSelected()){
-						txtCommonAmount.setEditable(true);
-						chkExtraCommon.setEnabled(true);
-					}else if(!chkCommonGuaranteed.isSelected()){
-						txtCommonAmount.setEditable(false);
-						chkExtraCommon.setEnabled(false);
-					}
-				}
-			});
-			GridBagConstraints gbc_chkCommonGuaranteed = new GridBagConstraints();
-			gbc_chkCommonGuaranteed.anchor = GridBagConstraints.WEST;
-			gbc_chkCommonGuaranteed.insets = new Insets(0, 0, 5, 5);
-			gbc_chkCommonGuaranteed.gridx = 0;
-			gbc_chkCommonGuaranteed.gridy = 4;
-			contentPanel.add(chkCommonGuaranteed, gbc_chkCommonGuaranteed);
+			lblCommonPigmentName = new JLabel("What is the name of the common Pigment?");
+			GridBagConstraints gbc_lblCommonPigmentName = new GridBagConstraints();
+			gbc_lblCommonPigmentName.anchor = GridBagConstraints.WEST;
+			gbc_lblCommonPigmentName.insets = new Insets(0, 0, 5, 5);
+			gbc_lblCommonPigmentName.gridx = 0;
+			gbc_lblCommonPigmentName.gridy = 4;
+			contentPanel.add(lblCommonPigmentName, gbc_lblCommonPigmentName);
 		}
 		{
-			lblCommonAmount = new JLabel("How many?");
-			GridBagConstraints gbc_lblCommonAmount = new GridBagConstraints();
-			gbc_lblCommonAmount.anchor = GridBagConstraints.WEST;
-			gbc_lblCommonAmount.insets = new Insets(0, 0, 5, 5);
-			gbc_lblCommonAmount.gridx = 0;
-			gbc_lblCommonAmount.gridy = 5;
-			contentPanel.add(lblCommonAmount, gbc_lblCommonAmount);
+			txtComPigmentName = new JTextField();
+			GridBagConstraints gbc_txtComPigmentName = new GridBagConstraints();
+			gbc_txtComPigmentName.insets = new Insets(0, 0, 5, 0);
+			gbc_txtComPigmentName.fill = GridBagConstraints.HORIZONTAL;
+			gbc_txtComPigmentName.gridx = 1;
+			gbc_txtComPigmentName.gridy = 4;
+			contentPanel.add(txtComPigmentName, gbc_txtComPigmentName);
+			txtComPigmentName.setColumns(10);
 		}
 		{
-			txtCommonAmount = new JTextField();
-			txtCommonAmount.setEditable(false);
-			GridBagConstraints gbc_txtCommonAmount = new GridBagConstraints();
-			gbc_txtCommonAmount.insets = new Insets(0, 0, 5, 0);
-			gbc_txtCommonAmount.fill = GridBagConstraints.HORIZONTAL;
-			gbc_txtCommonAmount.gridx = 1;
-			gbc_txtCommonAmount.gridy = 5;
-			contentPanel.add(txtCommonAmount, gbc_txtCommonAmount);
-			txtCommonAmount.setColumns(10);
-		}
-		{
-			chkExtraCommon = new JCheckBox("Chances of extra common pigments on mill?");
-			chkExtraCommon.setEnabled(false);
-			chkExtraCommon.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					if(chkExtraCommon.isSelected()){
-						txtCommonChanceTo.setEditable(true);
-						txtCommonChanceOff.setEditable(true);
-					}else if(!chkExtraCommon.isSelected()){
-						txtCommonChanceTo.setEditable(false);
-						txtCommonChanceOff.setEditable(false);
-					}
-				}
-			});
-			GridBagConstraints gbc_chkExtraCommon = new GridBagConstraints();
-			gbc_chkExtraCommon.anchor = GridBagConstraints.WEST;
-			gbc_chkExtraCommon.insets = new Insets(0, 0, 5, 5);
-			gbc_chkExtraCommon.gridx = 0;
-			gbc_chkExtraCommon.gridy = 6;
-			contentPanel.add(chkExtraCommon, gbc_chkExtraCommon);
-		}
-		{
-			lblCommonChanceToOff = new JLabel("How many / Out of? (Eg: 1-2 with 50% chance = 2/4)");
+			lblCommonChanceToOff = new JLabel("How many? (Eg: 2-4)");
 			GridBagConstraints gbc_lblCommonChanceToOff = new GridBagConstraints();
 			gbc_lblCommonChanceToOff.insets = new Insets(0, 0, 5, 5);
 			gbc_lblCommonChanceToOff.anchor = GridBagConstraints.WEST;
 			gbc_lblCommonChanceToOff.gridx = 0;
-			gbc_lblCommonChanceToOff.gridy = 7;
+			gbc_lblCommonChanceToOff.gridy = 5;
 			contentPanel.add(lblCommonChanceToOff, gbc_lblCommonChanceToOff);
 		}
 		{
-			JPanel panel = new JPanel();
-			GridBagConstraints gbc_panel = new GridBagConstraints();
-			gbc_panel.insets = new Insets(0, 0, 5, 0);
-			gbc_panel.fill = GridBagConstraints.BOTH;
-			gbc_panel.gridx = 1;
-			gbc_panel.gridy = 7;
-			contentPanel.add(panel, gbc_panel);
-			panel.setLayout(new FormLayout(new ColumnSpec[] {
+			panel_1 = new JPanel();
+			GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+			gbc_panel_1.insets = new Insets(0, 0, 5, 0);
+			gbc_panel_1.fill = GridBagConstraints.BOTH;
+			gbc_panel_1.gridx = 1;
+			gbc_panel_1.gridy = 5;
+			contentPanel.add(panel_1, gbc_panel_1);
+			panel_1.setLayout(new FormLayout(new ColumnSpec[] {
 					ColumnSpec.decode("default:grow"),
-					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
 					FormFactory.DEFAULT_COLSPEC,
-					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
 					ColumnSpec.decode("default:grow"),},
 				new RowSpec[] {
 					FormFactory.DEFAULT_ROWSPEC,}));
 			{
-				txtCommonChanceTo = new JTextField();
-				txtCommonChanceTo.setEditable(false);
-				panel.add(txtCommonChanceTo, "1, 1, fill, default");
-				txtCommonChanceTo.setColumns(10);
+				txtCommonTo = new JTextField();
+				panel_1.add(txtCommonTo, "1, 1, fill, default");
+				txtCommonTo.setColumns(10);
 			}
 			{
-				JLabel lblNewLabel_1 = new JLabel("/");
-				panel.add(lblNewLabel_1, "3, 1, right, default");
+				lblNewLabel = new JLabel("-");
+				panel_1.add(lblNewLabel, "3, 1, right, default");
 			}
 			{
-				txtCommonChanceOff = new JTextField();
-				txtCommonChanceOff.setEditable(false);
-				panel.add(txtCommonChanceOff, "5, 1, fill, default");
-				txtCommonChanceOff.setColumns(10);
+				txtCommonOff = new JTextField();
+				panel_1.add(txtCommonOff, "5, 1, fill, default");
+				txtCommonOff.setColumns(10);
 			}
 		}
 		{
@@ -261,7 +196,7 @@ public class NewHerbDialog extends JDialog {
 			gbc_chkPigmentRare.anchor = GridBagConstraints.WEST;
 			gbc_chkPigmentRare.insets = new Insets(0, 0, 5, 5);
 			gbc_chkPigmentRare.gridx = 0;
-			gbc_chkPigmentRare.gridy = 8;
+			gbc_chkPigmentRare.gridy = 7;
 			contentPanel.add(chkPigmentRare, gbc_chkPigmentRare);
 		}
 		{
@@ -270,7 +205,7 @@ public class NewHerbDialog extends JDialog {
 			gbc_lblRarePigmentName.insets = new Insets(0, 0, 5, 5);
 			gbc_lblRarePigmentName.anchor = GridBagConstraints.WEST;
 			gbc_lblRarePigmentName.gridx = 0;
-			gbc_lblRarePigmentName.gridy = 9;
+			gbc_lblRarePigmentName.gridy = 8;
 			contentPanel.add(lblRarePigmentName, gbc_lblRarePigmentName);
 		}
 		{
@@ -280,17 +215,17 @@ public class NewHerbDialog extends JDialog {
 			gbc_txtRarePigmentName.insets = new Insets(0, 0, 5, 0);
 			gbc_txtRarePigmentName.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtRarePigmentName.gridx = 1;
-			gbc_txtRarePigmentName.gridy = 9;
+			gbc_txtRarePigmentName.gridy = 8;
 			contentPanel.add(txtRarePigmentName, gbc_txtRarePigmentName);
 			txtRarePigmentName.setColumns(10);
 		}
 		{
-			lblRarePigmentChanceOffTo = new JLabel("How many / Out of? (Eg: 1-3 = 3/3)");
+			lblRarePigmentChanceOffTo = new JLabel("How many? (Eg: 1-3)");
 			GridBagConstraints gbc_lblRarePigmentChanceOffTo = new GridBagConstraints();
 			gbc_lblRarePigmentChanceOffTo.anchor = GridBagConstraints.WEST;
 			gbc_lblRarePigmentChanceOffTo.insets = new Insets(0, 0, 5, 5);
 			gbc_lblRarePigmentChanceOffTo.gridx = 0;
-			gbc_lblRarePigmentChanceOffTo.gridy = 10;
+			gbc_lblRarePigmentChanceOffTo.gridy = 9;
 			contentPanel.add(lblRarePigmentChanceOffTo, gbc_lblRarePigmentChanceOffTo);
 		}
 		{
@@ -299,7 +234,7 @@ public class NewHerbDialog extends JDialog {
 			gbc_panel.insets = new Insets(0, 0, 5, 0);
 			gbc_panel.fill = GridBagConstraints.BOTH;
 			gbc_panel.gridx = 1;
-			gbc_panel.gridy = 10;
+			gbc_panel.gridy = 9;
 			contentPanel.add(panel, gbc_panel);
 			panel.setLayout(new FormLayout(new ColumnSpec[] {
 					ColumnSpec.decode("default:grow"),
@@ -332,7 +267,7 @@ public class NewHerbDialog extends JDialog {
 			gbc_lblRareChancePercent.anchor = GridBagConstraints.WEST;
 			gbc_lblRareChancePercent.insets = new Insets(0, 0, 0, 5);
 			gbc_lblRareChancePercent.gridx = 0;
-			gbc_lblRareChancePercent.gridy = 11;
+			gbc_lblRareChancePercent.gridy = 10;
 			contentPanel.add(lblRareChancePercent, gbc_lblRareChancePercent);
 		}
 		{
@@ -341,7 +276,7 @@ public class NewHerbDialog extends JDialog {
 			GridBagConstraints gbc_txtRareChance = new GridBagConstraints();
 			gbc_txtRareChance.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtRareChance.gridx = 1;
-			gbc_txtRareChance.gridy = 11;
+			gbc_txtRareChance.gridy = 10;
 			contentPanel.add(txtRareChance, gbc_txtRareChance);
 			txtRareChance.setColumns(10);
 		}
@@ -378,36 +313,29 @@ public class NewHerbDialog extends JDialog {
 		if(checkValues()){
 			System.out.println("Step 2");
 			Herb h = null;
-			if(chkCommonGuaranteed.isSelected()){
+			
 				System.out.println("Step 3");
 				HerbCtr hCtr = new HerbCtr();
 				h = hCtr.createHerb(txtHerbName.getText());
 				PigmentCtr pCtr = new PigmentCtr();
 				Pigment p = null;
 				
-				if(!chkExtraCommon.isSelected()){
-					p = pCtr.createPigment(txtComPigmentName.getText(), 0, 0, Integer.parseInt(txtCommonAmount.getText()), 100);
-				}else{
-					p = pCtr.createPigment(txtComPigmentName.getText(), Integer.parseInt(txtCommonChanceTo.getText()), Integer.parseInt(txtCommonChanceOff.getText()), Integer.parseInt(txtCommonAmount.getText()), 100);
-				}
+				p = pCtr.createPigment(txtComPigmentName.getText(), Integer.parseInt(txtCommonTo.getText()), Integer.parseInt(txtCommonOff.getText()), 100);
 				
 				h.addPigment(p);
-			}
 			
-			if(chkPigmentRare.isSelected()){
-				System.out.println("Step 4");
-				PigmentCtr pCtr = new PigmentCtr();
-				Pigment p = null;
-				
-				String rareChance = txtRareChance.getText();
-				
-				if(rareChance.contains("%")){
-					rareChance = rareChance.replace("%", "");
+				if(chkPigmentRare.isSelected()){
+					System.out.println("Step 4");
+					
+					String rareChance = txtRareChance.getText();
+					
+					if(rareChance.contains("%")){
+						rareChance = rareChance.replace("%", "");
+					}
+					
+					p = pCtr.createPigment(txtRarePigmentName.getText(), Integer.parseInt(txtRareChanceTo.getText()), Integer.parseInt(txtRareChanceOff.getText()), Integer.parseInt(rareChance));
+					h.addPigment(p);
 				}
-				
-				p = pCtr.createPigment(txtRarePigmentName.getText(), Integer.parseInt(txtRareChanceTo.getText()), Integer.parseInt(txtRareChanceOff.getText()), 0, Integer.parseInt(rareChance));
-				h.addPigment(p);
-			}
 			parent.updateList();
 			this.dispose();
 		}
@@ -421,30 +349,9 @@ public class NewHerbDialog extends JDialog {
 			ret = false;
 		}
 		
-		if(chkCommonGuaranteed.isSelected() || chkExtraCommon.isSelected()){
-			if(txtComPigmentName.getText().isEmpty()){
-				error(lblCommonPigmentName);
-				ret = false;
-			}
-		}
-		
-		if(chkCommonGuaranteed.isSelected()){
-			try{
-				Integer.parseInt(txtCommonAmount.getText());
-			}catch(Exception e){
-				error(lblCommonAmount);
-				ret = false;
-			}
-		}
-		
-		if(chkExtraCommon.isSelected()){
-			try{
-				Integer.parseInt(txtCommonChanceOff.getText());
-				Integer.parseInt(txtCommonChanceTo.getText());
-			}catch(Exception e){
-				error(lblCommonChanceToOff);
-				ret = false;
-			}
+		if(txtComPigmentName.getText().isEmpty()){
+			error(lblCommonPigmentName);
+			ret = false;
 		}
 		
 		if(chkPigmentRare.isSelected()){

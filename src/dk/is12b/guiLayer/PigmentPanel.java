@@ -38,7 +38,6 @@ import javax.swing.event.ListSelectionEvent;
 
 public class PigmentPanel extends JPanel {
 	private JTextField txtName;
-	private JTextField txtMin;
 	private JTextField txtPercent;
 	private JTextField txtChanceOff;
 	private JTextField txtChanceTo;
@@ -88,7 +87,7 @@ public class PigmentPanel extends JPanel {
 				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("fill:200px"),
+				RowSpec.decode("fill:180px"),
 				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(99dlu;default)"),
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -130,8 +129,6 @@ public class PigmentPanel extends JPanel {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JLabel lblNewLabel_1 = new JLabel("Name:");
@@ -141,7 +138,7 @@ public class PigmentPanel extends JPanel {
 		panel_7.add(txtName, "4, 2, fill, default");
 		txtName.setColumns(10);
 		
-		JLabel lblNewLabel_2 = new JLabel("ChanceTO:");
+		JLabel lblNewLabel_2 = new JLabel("Amount:");
 		panel_7.add(lblNewLabel_2, "2, 4, left, default");
 		
 		JPanel panel_8 = new JPanel();
@@ -164,18 +161,11 @@ public class PigmentPanel extends JPanel {
 		panel_8.add(txtChanceOff, "3, 1, fill, default");
 		txtChanceOff.setColumns(10);
 		
-		JLabel lblNewLabel_3 = new JLabel("Min:");
-		panel_7.add(lblNewLabel_3, "2, 6, left, default");
-		
-		txtMin = new JTextField();
-		panel_7.add(txtMin, "4, 6, fill, default");
-		txtMin.setColumns(10);
-		
 		JLabel lblNewLabel_4 = new JLabel("Percent:");
-		panel_7.add(lblNewLabel_4, "2, 8, left, default");
+		panel_7.add(lblNewLabel_4, "2, 6, left, default");
 		
 		txtPercent = new JTextField();
-		panel_7.add(txtPercent, "4, 8, fill, default");
+		panel_7.add(txtPercent, "4, 6, fill, default");
 		txtPercent.setColumns(10);
 		
 		JPanel panel_6 = new JPanel();
@@ -243,7 +233,6 @@ public class PigmentPanel extends JPanel {
 		if(selectedPigment != null){
 			txtChanceOff.setText(String.valueOf(selectedPigment.getChanceOff()));
 			txtChanceTo.setText(String.valueOf(selectedPigment.getChanceTo()));
-			txtMin.setText(String.valueOf(selectedPigment.getMin()));
 			txtName.setText(selectedPigment.getName());
 			txtPercent.setText(String.valueOf(selectedPigment.getPercent()));
 		}
@@ -251,7 +240,7 @@ public class PigmentPanel extends JPanel {
 
 	protected void create() {
 		if(checkValues()){
-			model.addElement(pCtr.createPigment(txtName.getText(), Integer.parseInt(txtChanceTo.getText()), Integer.parseInt(txtChanceOff.getText()), Integer.parseInt(txtMin.getText()), Integer.parseInt(txtPercent.getText())));
+			model.addElement(pCtr.createPigment(txtName.getText(), Integer.parseInt(txtChanceTo.getText()), Integer.parseInt(txtChanceOff.getText()), Integer.parseInt(txtPercent.getText())));
 		}
 	}
 
@@ -265,7 +254,7 @@ public class PigmentPanel extends JPanel {
 	protected void update() {
 		if(selectedPigment != null){
 			if(checkValues()){
-				pCtr.updatePigment(selectedPigment, txtName.getText(), Integer.parseInt(txtChanceTo.getText()), Integer.parseInt(txtChanceOff.getText()), Integer.parseInt(txtMin.getText()), Integer.parseInt(txtPercent.getText()));
+				pCtr.updatePigment(selectedPigment, txtName.getText(), Integer.parseInt(txtChanceTo.getText()), Integer.parseInt(txtChanceOff.getText()), Integer.parseInt(txtPercent.getText()));
 				list.repaint();
 			}
 		}
@@ -275,7 +264,6 @@ public class PigmentPanel extends JPanel {
 		selectedPigment = null;
 		txtChanceOff.setText("");
 		txtChanceTo.setText("");
-		txtMin.setText("");
 		txtName.setText("");
 		txtPercent.setText("");
 	}
@@ -289,7 +277,6 @@ public class PigmentPanel extends JPanel {
 			}else{
 				Integer.parseInt(txtChanceTo.getText());
 				Integer.parseInt(txtChanceOff.getText());
-				Integer.parseInt(txtMin.getText()) ;
 				Integer.parseInt(txtPercent.getText());
 			}
 		}catch(Exception e){

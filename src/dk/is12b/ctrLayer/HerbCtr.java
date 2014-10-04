@@ -33,4 +33,8 @@ private DBHerb dbHerb;
 		dbHerb.deleteHerb(h, removeAccociated);
 	}
 
+	public Herb getHerb(int id) {
+		return dbHerb.getHerb(id);
+	}
+
 }
