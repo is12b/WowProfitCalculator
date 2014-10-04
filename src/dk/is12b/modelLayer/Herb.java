@@ -2,6 +2,8 @@ package dk.is12b.modelLayer;
 
 import java.util.ArrayList;
 
+import dk.is12b.dbLayer.DBHerb;
+
 public class Herb {
 	private int id;
 	private String name;
@@ -46,6 +48,8 @@ public class Herb {
 	
 	public void addPigment(Pigment p){
 		pigments.add(p);
+		DBHerb dbHerb = new DBHerb();
+		dbHerb.updateHerb(this, getName());
 	}
 	
 	public void removePigment(Pigment p){

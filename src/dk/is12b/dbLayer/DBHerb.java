@@ -22,17 +22,19 @@ public class DBHerb {
 		try {
 			int id = DBGetMax.getMaxId("SELECT MAX(ID) FROM HERB");
 	        id = id + 1;
+	        h.setId(id);
 	        
 	        String pigments = "";
 	        ArrayList<Pigment> pigs = h.getPigments();
-	        for(Pigment p : pigs){
-	        	pigments += p.getId() + ",";
+	        if(pigs.size() > 0){
+		        for(Pigment p : pigs){
+		        	pigments += p.getId() + ",";
+		        }
+		        pigments = pigments.substring(0, pigments.length()-1);
 	        }
-	        pigments = pigments.substring(0, pigments.length()-1);
-	        
 			stmt = c.createStatement();
 			String sql = "INSERT INTO HERB (ID,NAME,PIGMENTS) " +
-	                   "VALUES (" + id + ", '" + h.getName()  + "', '" + pigments + "' );"; 
+	                   "VALUES (" + h.getId() + ", '" + h.getName()  + "', '" + pigments + "' );"; 
 			stmt.executeUpdate(sql);
 			stmt.close();
 			
@@ -87,17 +89,18 @@ public class DBHerb {
 		
 		String pigments = "";
         ArrayList<Pigment> pigs = h.getPigments();
-        for(Pigment p : pigs){
-        	pigments += p.getId() + ",";
+        if(pigs.size() > 0){
+	        for(Pigment p : pigs){
+	        	pigments += p.getId() + ",";
+	        }
+	        pigments = pigments.substring(0, pigments.length()-1);
         }
-        pigments = pigments.substring(0, pigments.length()-1);
-		
 		Statement stmt;
 		try{
 			stmt = c.createStatement();
 			String sql = "UPDATE HERB "
 					   + "SET NAME = '" + name + "', " 
-					   + "PIGMENTS = " + pigments + " "
+					   + "PIGMENTS = '" + pigments + "' "
 					   + "WHERE ID = " + h.getId() + ";";
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
@@ -107,7 +110,7 @@ public class DBHerb {
 		}
 	}
 
-	public void deleteHerb(Herb h) {
+	public void deleteHerb(Herb h, boolean removeAccociated) {
 		DBConnection dbCon = DBConnection.getInstance();
 		Connection c = dbCon.getConnection();
 		
@@ -118,6 +121,15 @@ public class DBHerb {
 			String sql = "DELETE FROM HERB WHERE ID = " + h.getId();
 			stmt.executeUpdate(sql);
 			stmt.close();
+			if(removeAccociated){
+				ArrayList<Pigment> pigs = h.getPigments();
+		        if(pigs.size() > 0){
+			        for(Pigment p : pigs){
+			        	DBPigment dbPig = new DBPigment();
+			        	dbPig.deletePigment(p);
+			        }
+		        }
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}

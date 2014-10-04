@@ -29,8 +29,8 @@ private DBHerb dbHerb;
 		dbHerb.updateHerb(h, name);
 	}
 	
-	public void deleteHerb(Herb h){
-		dbHerb.deleteHerb(h);
+	public void deleteHerb(Herb h, boolean removeAccociated){
+		dbHerb.deleteHerb(h, removeAccociated);
 	}
 
 }

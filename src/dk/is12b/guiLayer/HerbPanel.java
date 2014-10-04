@@ -24,6 +24,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -31,7 +32,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
 import dk.is12b.ctrLayer.HerbCtr;
+import dk.is12b.ctrLayer.PigmentCtr;
 import dk.is12b.modelLayer.Herb;
+import dk.is12b.modelLayer.Pigment;
 
 public class HerbPanel extends JPanel {
 	/**
@@ -55,12 +58,14 @@ public class HerbPanel extends JPanel {
 	protected ArrayList<TreePath[]> paths;
 	protected HerbTreeModel model;
 	protected ArrayList<Herb> herbs;
+	private JButton btnNewHerb;
+	private HerbCtr hCtr;
 	
 	/**
 	 * Create the panel.
 	 */
 	public HerbPanel() {
-		HerbCtr hCtr = new HerbCtr();
+		hCtr = new HerbCtr();
 		herbs = hCtr.getAllHerbs();
 		paths = new ArrayList<TreePath[]>();
 		selected = new ArrayList<Object>();
@@ -90,6 +95,7 @@ public class HerbPanel extends JPanel {
 		
 		
 		tree = new JTree();
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		scrollPane.setViewportView(tree);
 		
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
@@ -164,6 +170,20 @@ public class HerbPanel extends JPanel {
 		panel_2 = new JPanel();
 		panel.add(panel_2, "1, 4, fill, fill");
 		
+		btnNewHerb = new JButton("New Herb");
+		btnNewHerb.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				NewHerbDialog herbDia = new NewHerbDialog(HerbPanel.this);
+				herbDia.setVisible(true);
+			}
+		});
+		panel_2.add(btnNewHerb);
+		
+		updateList();
+	}
+	
+	public void updateList(){
+		herbs = hCtr.getAllHerbs();
 		model = new HerbTreeModel(herbs);
 		tree.setModel(model);
 	}
@@ -189,39 +209,55 @@ public class HerbPanel extends JPanel {
 
 	protected void treePopup(MouseEvent e) {
 		if(SwingUtilities.isRightMouseButton(e)){
-			if(selected.size() > 0){
-				boolean trees = false, forest = false, owner = false;
-				for(Object sel : selected){
-					//if(sel instanceof Owner){
-					//	owner = true;
-					//}else if(sel instanceof Forest){
-					//	forest = true;
-					//}else if(sel instanceof Tree){
-					//	trees = true;
-					//}
-				}
-				
-				JPopupMenu popupMenu = new JPopupMenu();
-				if((owner) || (trees) || (forest)){
-					JMenuItem mntmAllUpdate = new JMenuItem("Update");
-					mntmAllUpdate.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent arg0) {
-							//update();
-						}
-					});
-					JMenuItem mntmAllRemove = new JMenuItem("Remove");
-					mntmAllRemove.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent arg0) {
-							//remove();
-						}
-					});
-					popupMenu.add(mntmAllUpdate);
-					popupMenu.add(mntmAllRemove);
-				}
-				
-				popupMenu.show(tree, e.getX(), e.getY());
+			Object sel = tree.getLastSelectedPathComponent();
+			boolean pigment = false, herb = false;
+			if(sel instanceof Herb){
+				herb = true;
+			}else if(sel instanceof Pigment){
+				pigment = true;
 			}
+			
+			JPopupMenu popupMenu = new JPopupMenu();
+			if(herb){
+				JMenuItem mntmRemoveHerb = new JMenuItem("Remove Herb");
+				mntmRemoveHerb.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						removeHerb(false);
+					}
+				});
+				JMenuItem mntmRemoveHerbAsso = new JMenuItem("Remove Herb + Pigments");
+				mntmRemoveHerbAsso.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						removeHerb(true);
+					}
+				});
+				popupMenu.add(mntmRemoveHerb);
+				popupMenu.add(mntmRemoveHerbAsso);
+			}else if(pigment){
+				JMenuItem mntmRemovePigment = new JMenuItem("Remove Pigment");
+				mntmRemovePigment.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						removePigment();
+					}
+				});
+				popupMenu.add(mntmRemovePigment);
+			}
+			
+			popupMenu.show(tree, e.getX(), e.getY());
 		}
+	}
+
+	protected void removeHerb(boolean removeAccociated) {
+		Herb h = (Herb) tree.getLastSelectedPathComponent();
+		hCtr.deleteHerb(h, removeAccociated);
+		updateList();
+	}
+
+	protected void removePigment() {
+		PigmentCtr pCtr = new PigmentCtr();
+		Pigment p = (Pigment) tree.getLastSelectedPathComponent();
+		pCtr.deletePigment(p);
+		updateList();
 	}
 	
 	/*
