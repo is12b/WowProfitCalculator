@@ -10,7 +10,7 @@ public class Pigment {
 	private int chanceOff;
 	private int percent;
 	private double per;
-	
+
 	public Pigment(String name, int chanceTo, int chanceOff, int percent){
 		this.name = name;
 		this.chanceTo = chanceTo;
@@ -133,7 +133,5 @@ public class Pigment {
 	public String toString() {
 		return name;
 	}
-
-		
 	
 }

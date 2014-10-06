@@ -28,6 +28,7 @@ public class DBConnection {
 	    //if(exist){
 	    //	createPigmentTable();
 	    //	createHerbTable();
+	    //	createInkTable();
 	    //}
 	}
 	
@@ -70,6 +71,21 @@ public class DBConnection {
 		      stmt.executeUpdate(herbQuery);
 		      stmt.close();
 		      System.out.println("HerbTable Created");
+		    } catch ( Exception e ) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		    }
+	}
+	
+	private void createInkTable(){
+		try {
+		      Statement stmt = c.createStatement();
+		      String herbQuery = "CREATE TABLE INK " +
+	                   "(ID INT PRIMARY KEY     NOT NULL," +
+	                   " NAME           TEXT    NOT NULL, " + 
+	                   " PIGMENTS       TEXT    NOT NULL)"; 
+		      stmt.executeUpdate(herbQuery);
+		      stmt.close();
+		      System.out.println("InkTable Created");
 		    } catch ( Exception e ) {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		    }
