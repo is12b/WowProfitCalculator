@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class Pigment {
 	private int id;
+	private Herb owner;
 	private String name;
 	private int chanceTo;
 	private int chanceOff;
@@ -133,5 +134,21 @@ public class Pigment {
 	public String toString() {
 		return name;
 	}
+
+	/**
+	 * @return the owner
+	 */
+	public Herb getOwner() {
+		return owner;
+	}
+
+	/**
+	 * @param owner the owner to set
+	 */
+	public void setOwner(Herb owner) {
+		this.owner = owner;
+	}
+	
+	
 	
 }

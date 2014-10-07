@@ -240,7 +240,7 @@ public class PigmentPanel extends JPanel {
 
 	protected void create() {
 		if(checkValues()){
-			model.addElement(pCtr.createPigment(txtName.getText(), Integer.parseInt(txtChanceTo.getText()), Integer.parseInt(txtChanceOff.getText()), Integer.parseInt(txtPercent.getText())));
+			model.addElement(pCtr.createPigment(txtName.getText(), Integer.parseInt(txtChanceTo.getText()), Integer.parseInt(txtChanceOff.getText()), Integer.parseInt(txtPercent.getText()), null));
 		}
 	}
 
@@ -254,7 +254,7 @@ public class PigmentPanel extends JPanel {
 	protected void update() {
 		if(selectedPigment != null){
 			if(checkValues()){
-				pCtr.updatePigment(selectedPigment, txtName.getText(), Integer.parseInt(txtChanceTo.getText()), Integer.parseInt(txtChanceOff.getText()), Integer.parseInt(txtPercent.getText()));
+				pCtr.updatePigment(selectedPigment, txtName.getText(), Integer.parseInt(txtChanceTo.getText()), Integer.parseInt(txtChanceOff.getText()), Integer.parseInt(txtPercent.getText()), null, false);
 				list.repaint();
 			}
 		}

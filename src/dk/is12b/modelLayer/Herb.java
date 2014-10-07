@@ -47,6 +47,7 @@ public class Herb {
 	}
 	
 	public void addPigment(Pigment p){
+		p.setOwner(this);
 		pigments.add(p);
 		DBHerb dbHerb = new DBHerb();
 		dbHerb.updateHerb(this, getName());

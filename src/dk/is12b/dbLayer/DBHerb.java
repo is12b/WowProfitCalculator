@@ -24,21 +24,20 @@ public class DBHerb {
 	        id = id + 1;
 	        h.setId(id);
 	        
-	        String pigments = "";
 	        ArrayList<Pigment> pigs = h.getPigments();
 	        if(pigs.size() > 0){
 		        for(Pigment p : pigs){
-		        	pigments += p.getId() + ",";
+		        	DBPigment dbPig = new DBPigment();
+		        	dbPig.updatePigment(p, p.getName(), p.getChanceTo(), p.getChanceOff(), p.getPercent(), h, true);
 		        }
-		        pigments = pigments.substring(0, pigments.length()-1);
 	        }
 			stmt = c.createStatement();
-			String sql = "INSERT INTO HERB (ID,NAME,PIGMENTS) " +
-	                   "VALUES (" + h.getId() + ", '" + h.getName()  + "', '" + pigments + "' );"; 
+			String sql = "INSERT INTO HERB (ID,NAME) " +
+	                   "VALUES (" + h.getId() + ", '" + h.getName()  + "');"; 
 			stmt.executeUpdate(sql);
 			stmt.close();
 			
-			//System.out.println("Insert Herb: "  + id + ", '" + h.getName()  + "', " + pigments);
+			System.out.println("Insert Herb: "  + id + ", '" + h.getName());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -60,15 +59,17 @@ public class DBHerb {
 				System.out.println("Rs.next ok");
 				Herb h = new Herb(rs.getString("NAME"));
 				h.setId(rs.getInt("ID"));
-				String pigments = rs.getString("PIGMENTS");
-				if(!pigments.isEmpty()){
-					System.out.println("Pigments ok");
-					String[] pigsArr = pigments.split(",");
-					DBPigment dbPig = new DBPigment(); 
-					for(String s : pigsArr){
-						Pigment p = dbPig.getPigment(Integer.parseInt(s));
-						h.addPigment(p);
+				
+				try{
+					DBPigment dbPig = new DBPigment();
+					ArrayList<Pigment> pigs = dbPig.getPigmentsByOwner(h);
+					if(pigs.size() > 0){
+						for(Pigment p : pigs){
+							h.addPigment(p);
+						}
 					}
+				}catch(Exception e){
+					System.out.println(e);
 				}
 				
 				herbs.add(h);
@@ -86,21 +87,12 @@ public class DBHerb {
 	public void updateHerb(Herb h, String name) {
 		DBConnection dbCon = DBConnection.getInstance();
 		Connection c = dbCon.getConnection();
-		
-		String pigments = "";
-        ArrayList<Pigment> pigs = h.getPigments();
-        if(pigs.size() > 0){
-	        for(Pigment p : pigs){
-	        	pigments += p.getId() + ",";
-	        }
-	        pigments = pigments.substring(0, pigments.length()-1);
-        }
+	
 		Statement stmt;
 		try{
 			stmt = c.createStatement();
 			String sql = "UPDATE HERB "
-					   + "SET NAME = '" + name + "', " 
-					   + "PIGMENTS = '" + pigments + "' "
+					   + "SET NAME = '" + name + "' " 
 					   + "WHERE ID = " + h.getId() + ";";
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
@@ -152,15 +144,18 @@ public class DBHerb {
 				System.out.println("Rs.next ok");
 				herb = new Herb(rs.getString("NAME"));
 				herb.setId(rs.getInt("ID"));
-				String pigments = rs.getString("PIGMENTS");
-				if(!pigments.isEmpty()){
-					System.out.println("Pigments ok");
-					String[] pigsArr = pigments.split(",");
-					DBPigment dbPig = new DBPigment(); 
-					for(String s : pigsArr){
-						Pigment p = dbPig.getPigment(Integer.parseInt(s));
-						herb.addPigment(p);
+				
+
+				try{
+					DBPigment dbPig = new DBPigment();
+					ArrayList<Pigment> pigs = dbPig.getPigmentsByOwner(herb);
+					if(pigs.size() > 0){
+						for(Pigment p : pigs){
+							herb.addPigment(p);
+						}
 					}
+				}catch(Exception e){
+					System.out.println(e);
 				}
 				
 			}

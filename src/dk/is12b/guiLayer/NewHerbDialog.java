@@ -320,8 +320,7 @@ public class NewHerbDialog extends JDialog {
 				PigmentCtr pCtr = new PigmentCtr();
 				Pigment p = null;
 				
-				p = pCtr.createPigment(txtComPigmentName.getText(), Integer.parseInt(txtCommonTo.getText()), Integer.parseInt(txtCommonOff.getText()), 100);
-				
+				p = pCtr.createPigment(txtComPigmentName.getText(), Integer.parseInt(txtCommonTo.getText()), Integer.parseInt(txtCommonOff.getText()), 100, h);
 				h.addPigment(p);
 			
 				if(chkPigmentRare.isSelected()){
@@ -333,7 +332,7 @@ public class NewHerbDialog extends JDialog {
 						rareChance = rareChance.replace("%", "");
 					}
 					
-					p = pCtr.createPigment(txtRarePigmentName.getText(), Integer.parseInt(txtRareChanceTo.getText()), Integer.parseInt(txtRareChanceOff.getText()), Integer.parseInt(rareChance));
+					p = pCtr.createPigment(txtRarePigmentName.getText(), Integer.parseInt(txtRareChanceTo.getText()), Integer.parseInt(txtRareChanceOff.getText()), Integer.parseInt(rareChance), h);
 					h.addPigment(p);
 				}
 			parent.updateList();

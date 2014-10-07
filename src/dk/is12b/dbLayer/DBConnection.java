@@ -26,9 +26,10 @@ public class DBConnection {
 	    System.out.println("Opened database successfully");
 	    
 	    //if(exist){
-	    //	createPigmentTable();
 	    //	createHerbTable();
+	    //	createPigmentTable();
 	    //	createInkTable();
+	    //	createInkPigmentTable();
 	    //}
 	}
 	
@@ -48,11 +49,14 @@ public class DBConnection {
 		try {
 		      Statement stmt = c.createStatement();
 		      String pigmentQuery = "CREATE TABLE PIGMENT " +
-		                   "(ID INT PRIMARY KEY     NOT NULL," +
+		                   "(ID 		    INT     NOT NULL, " +
 		                   " NAME           TEXT    NOT NULL, " + 
 		                   " CHANCETO       INT     NOT NULL, " + 
 		                   " CHANCEOFF      INT     NOT NULL, " + 
-		                   " PERCENT        INT     NOT NULL)"; 
+		                   " PERCENT        INT     NOT NULL, " + 
+		                   " OWNER          INT, " + 
+		                   " PRIMARY KEY(id, owner), " +
+		                   " FOREIGN KEY(OWNER) REFERENCES HERB(ID))"; 
 		      stmt.executeUpdate(pigmentQuery);
 		      stmt.close();
 		      System.out.println("PigmentTable Created");
@@ -66,8 +70,7 @@ public class DBConnection {
 		      Statement stmt = c.createStatement();
 		      String herbQuery = "CREATE TABLE HERB " +
 	                   "(ID INT PRIMARY KEY     NOT NULL," +
-	                   " NAME           TEXT    NOT NULL, " + 
-	                   " PIGMENTS       TEXT    NOT NULL)"; 
+	                   " NAME       TEXT    NOT NULL)"; 
 		      stmt.executeUpdate(herbQuery);
 		      stmt.close();
 		      System.out.println("HerbTable Created");
@@ -81,11 +84,27 @@ public class DBConnection {
 		      Statement stmt = c.createStatement();
 		      String herbQuery = "CREATE TABLE INK " +
 	                   "(ID INT PRIMARY KEY     NOT NULL," +
-	                   " NAME           TEXT    NOT NULL, " + 
-	                   " PIGMENTS       TEXT    NOT NULL)"; 
+	                   " NAME           TEXT    NOT NULL)";
 		      stmt.executeUpdate(herbQuery);
 		      stmt.close();
 		      System.out.println("InkTable Created");
+		    } catch ( Exception e ) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		    }
+	}
+	
+	private void createInkPigmentTable(){
+		try {
+		      Statement stmt = c.createStatement();
+		      String herbQuery = "CREATE TABLE INKPIGMENT " +
+	                   "(INKID INT     NOT NULL," +
+	                   " PIGID INT     NOT NULL," + 
+	                   " PRIMARY KEY(inkid, pigid)," +
+	                   " FOREIGN KEY(INKID) REFERENCES INK(ID) ON DELETE CASCADE" +
+	                   " FOREIGN KEY(PIGID) REFERENCES PIGMENT(ID) ON DELETE CASCADE )";
+		      stmt.executeUpdate(herbQuery);
+		      stmt.close();
+		      System.out.println("InkPigmentTable Created");
 		    } catch ( Exception e ) {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		    }

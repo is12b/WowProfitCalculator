@@ -5,11 +5,10 @@ import java.util.HashMap;
 public class Ink {
 	private int id;
 	private String name;
-	private HashMap<Integer, Integer> pigments;
+	private int amount;
 	
 	public Ink(String name){
 		this.name = name;
-		pigments = new HashMap<Integer, Integer>();
 	}
 
 	/**
@@ -39,5 +38,21 @@ public class Ink {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	/**
+	 * @return the amount
+	 */
+	public int getAmount() {
+		return amount;
+	}
+
+	/**
+	 * @param amount the amount to set
+	 */
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+	
+	
 
 }

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import dk.is12b.modelLayer.Herb;
 import dk.is12b.modelLayer.Pigment;
 
 public class DBPigment {
@@ -24,12 +25,17 @@ public class DBPigment {
 	        id = id + 1;
 	        p.setId(id);
 			stmt = c.createStatement();
-			String sql = "INSERT INTO PIGMENT (ID,NAME,CHANCETO,CHANCEOFF,PERCENT) " +
-	                   "VALUES (" + id + ", '" + p.getName()  + "', " + p.getChanceTo() + ", " + p.getChanceOff() + ", " + p.getPercent() + " );"; 
+			int ownerID = 0;
+			if(p.getOwner() != null){
+				ownerID = p.getOwner().getId();
+			}
+			System.out.println("Insert Pigment: " + id + ", '" + p.getName()  + "', " + p.getChanceTo() + ", " + p.getChanceOff() + ", " + p.getPercent() + ", " + ownerID);
+			String sql = "INSERT INTO PIGMENT (ID,NAME,CHANCETO,CHANCEOFF,PERCENT,OWNER) " +
+	                   "VALUES (" + id + ", '" + p.getName()  + "', " + p.getChanceTo() + ", " + p.getChanceOff() + ", " + p.getPercent() + ", " + ownerID + " );"; 
 			stmt.executeUpdate(sql);
 			stmt.close();
 			
-			System.out.println("Insert Pigment: " + id + ", '" + p.getName()  + "', " + p.getChanceTo() + ", " + p.getChanceOff() + ", " + p.getPercent());
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -50,6 +56,8 @@ public class DBPigment {
 			while(rs.next()){
 				Pigment p = new Pigment(rs.getString("NAME"), rs.getInt("CHANCETO"), rs.getInt("CHANCEOFF"), rs.getInt("PERCENT"));
 				p.setId(rs.getInt("ID"));
+				DBHerb dbh = new DBHerb();
+				p.setOwner(dbh.getHerb(rs.getInt("OWNER")));
 				pigments.add(p);
 			}
 			
@@ -61,9 +69,14 @@ public class DBPigment {
 		return pigments;
 	}
 
-	public void updatePigment(Pigment p, String name, int chanceTo, int chanceOff, int percent) {
+	public void updatePigment(Pigment p, String name, int chanceTo, int chanceOff, int percent, Herb h, boolean updateHerb) {
 		DBConnection dbCon = DBConnection.getInstance();
 		Connection c = dbCon.getConnection();
+		Herb hl = h;
+		
+		if(!updateHerb){
+			hl = p.getOwner();
+		}
 		
 		Statement stmt;
 		
@@ -73,7 +86,8 @@ public class DBPigment {
 					   + "SET NAME = '" + name + "', " 
 					   + "CHANCETO = " + chanceTo + ", "
 					   + "CHANCEOFF = " + chanceOff + ", "
-					   + "PERCENT = " + percent + " "
+					   + "PERCENT = " + percent + ", "
+					   + "OWNER = " + hl.getId() + " "
 					   + "WHERE ID = " + p.getId() + ";";
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
@@ -114,6 +128,36 @@ public class DBPigment {
 			if(rs.next()){
 				pigment = new Pigment(rs.getString("NAME"), rs.getInt("CHANCETO"), rs.getInt("CHANCEOFF"), rs.getInt("PERCENT"));
 				pigment.setId(rs.getInt("ID"));
+				DBHerb dbh = new DBHerb();
+				pigment.setOwner(dbh.getHerb(rs.getInt("OWNER")));
+			}
+			
+			stmt.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return pigment;
+	}
+
+	public ArrayList<Pigment> getPigmentsByOwner(Herb h) {
+		ArrayList<Pigment> pigment = new ArrayList<Pigment>();
+		DBConnection dbCon = DBConnection.getInstance();
+		Connection c = dbCon.getConnection();
+		
+		Statement stmt;
+		
+		try {
+			stmt = c.createStatement();
+			String sql = "SELECT * FROM PIGMENT WHERE OWNER = " + h.getId();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while(rs.next()){
+				Pigment p = new Pigment(rs.getString("NAME"), rs.getInt("CHANCETO"), rs.getInt("CHANCEOFF"), rs.getInt("PERCENT"));
+				p.setId(rs.getInt("ID"));
+				p.setOwner(h);
+				
+				pigment.add(p);
 			}
 			
 			stmt.close();
