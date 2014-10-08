@@ -5,7 +5,10 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import dk.is12b.dbLayer.DBComposit;
+import dk.is12b.modelLayer.Composit;
 import dk.is12b.modelLayer.Herb;
+import dk.is12b.modelLayer.Ink;
 import dk.is12b.modelLayer.Pigment;
 
 
@@ -32,11 +35,19 @@ public class HerbTreeModel implements TreeModel{
 				o = herbs.get(index);
 			}
 		}else if(parent instanceof Herb){
-			ArrayList<Pigment> forests = ((Herb)parent).getPigments();
-			if(forests.size() < index){ 
+			ArrayList<Pigment> pigs = ((Herb)parent).getPigments();
+			if(pigs.size() < index){ 
 				return null;
 			}else{
-				o = forests.get(index);
+				o = pigs.get(index);
+			}
+		}else if(parent instanceof Pigment){
+			DBComposit dbComp = new DBComposit();
+			ArrayList<Composit> comps = dbComp.getCompositsByPigment((Pigment)parent);
+			if(comps.size() < index){ 
+				return null;
+			}else{
+				o = comps.get(index);
 			}
 		}else{
 			o = null;
@@ -52,6 +63,9 @@ public class HerbTreeModel implements TreeModel{
 			count = herbs.size();
 		}else if(parent instanceof Herb){
 			count = ((Herb)parent).getPigments().size();
+		}else if(parent instanceof Pigment){
+			DBComposit dbComp = new DBComposit();
+			count = dbComp.getCompositsByPigment((Pigment)parent).size();
 		}
 		
 		return count;
@@ -64,6 +78,9 @@ public class HerbTreeModel implements TreeModel{
 			res = herbs.indexOf(child);
 		}else if(parent instanceof Herb){
 			res = ((Herb)parent).getPigments().indexOf(child);
+		}else if(parent instanceof Pigment){
+			DBComposit dbComp = new DBComposit();
+			res = dbComp.getCompositsByPigment((Pigment)parent).indexOf(child);
 		}
 		
 		return res;
@@ -79,7 +96,7 @@ public class HerbTreeModel implements TreeModel{
 		
 		boolean res = true;
 		
-		if(node instanceof Herb || node instanceof Pigment || node instanceof String){
+		if(node instanceof Herb || node instanceof Pigment || node instanceof Ink || node instanceof String){
 			res = false;
 		}
 		

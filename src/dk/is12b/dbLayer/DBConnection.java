@@ -96,9 +96,10 @@ public class DBConnection {
 	private void createInkPigmentTable(){
 		try {
 		      Statement stmt = c.createStatement();
-		      String herbQuery = "CREATE TABLE INKPIGMENT " +
+		      String herbQuery = "CREATE TABLE COMPOSIT " +
 	                   "(INKID INT     NOT NULL," +
 	                   " PIGID INT     NOT NULL," + 
+	                   " AMOUNT INT    NOT NULL," +
 	                   " PRIMARY KEY(inkid, pigid)," +
 	                   " FOREIGN KEY(INKID) REFERENCES INK(ID) ON DELETE CASCADE" +
 	                   " FOREIGN KEY(PIGID) REFERENCES PIGMENT(ID) ON DELETE CASCADE )";

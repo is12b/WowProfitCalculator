@@ -31,9 +31,13 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+import dk.is12b.ctrLayer.CompositCtr;
 import dk.is12b.ctrLayer.HerbCtr;
+import dk.is12b.ctrLayer.InkCtr;
 import dk.is12b.ctrLayer.PigmentCtr;
+import dk.is12b.modelLayer.Composit;
 import dk.is12b.modelLayer.Herb;
+import dk.is12b.modelLayer.Ink;
 import dk.is12b.modelLayer.Pigment;
 
 public class HerbPanel extends JPanel {
@@ -60,6 +64,7 @@ public class HerbPanel extends JPanel {
 	protected ArrayList<Herb> herbs;
 	private JButton btnNewHerb;
 	private HerbCtr hCtr;
+	private Ink i;
 	
 	/**
 	 * Create the panel.
@@ -210,14 +215,16 @@ public class HerbPanel extends JPanel {
 	protected void treePopup(MouseEvent e) {
 		if(SwingUtilities.isRightMouseButton(e)){
 			Object sel = tree.getLastSelectedPathComponent();
-			boolean pigment = false, herb = false;
+			boolean pigment = false, herb = false, composit = false;
 			if(sel instanceof Herb){
 				herb = true;
 			}else if(sel instanceof Pigment){
 				pigment = true;
+			}else if(sel instanceof Composit){
+				composit = true;
 			}
 			
-			JPopupMenu popupMenu = new JPopupMenu();
+			JPopupMenu popupMenu = new JPopupMenu();			
 			if(herb){
 				JMenuItem mntmRemoveHerb = new JMenuItem("Remove Herb");
 				mntmRemoveHerb.addActionListener(new ActionListener() {
@@ -234,6 +241,12 @@ public class HerbPanel extends JPanel {
 				popupMenu.add(mntmRemoveHerb);
 				popupMenu.add(mntmRemoveHerbAsso);
 			}else if(pigment){
+				JMenuItem mntmCreateInk = new JMenuItem("Insert Ink");
+				mntmCreateInk.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						createInk();
+					}
+				});
 				JMenuItem mntmRemovePigment = new JMenuItem("Remove Pigment");
 				mntmRemovePigment.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
@@ -241,10 +254,38 @@ public class HerbPanel extends JPanel {
 					}
 				});
 				popupMenu.add(mntmRemovePigment);
+				popupMenu.add(mntmCreateInk);
+			}else if(composit){
+				JMenuItem mntmRemoveInk = new JMenuItem("Remove Ink");
+				mntmRemoveInk.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						removeInk();
+					}
+				});
+				popupMenu.add(mntmRemoveInk);
 			}
 			
 			popupMenu.show(tree, e.getX(), e.getY());
 		}
+	}
+
+	protected void removeInk() {
+		InkCtr iCtr = new InkCtr();
+		CompositCtr cCtr = new CompositCtr();
+		Composit comp = (Composit) tree.getLastSelectedPathComponent();
+		//Ink i = comp.getInk();
+		//cCtr.deleteComposit(, comp.getPigment());
+		iCtr.deleteInk(comp.getInk());
+		updateList();
+	}
+
+	protected void createInk() {
+		Pigment p = (Pigment) tree.getLastSelectedPathComponent();
+
+		CreateInk cInk = new CreateInk(p);
+		cInk.setVisible(true);
+		
+		updateList();
 	}
 
 	protected void removeHerb(boolean removeAccociated) {
@@ -259,6 +300,22 @@ public class HerbPanel extends JPanel {
 		pCtr.deletePigment(p);
 		updateList();
 	}
+
+	/**
+	 * @return the i
+	 */
+	public Ink getI() {
+		return i;
+	}
+
+	/**
+	 * @param i the i to set
+	 */
+	public void setI(Ink i) {
+		this.i = i;
+	}
+	
+	
 	
 	/*
 	protected void remove(){
