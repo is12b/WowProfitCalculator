@@ -14,6 +14,10 @@ public class Herb {
 		pigments = new ArrayList<Pigment>();
 	}
 	
+	public Herb(int id) {
+		this.id = id;
+	}
+
 	public int getRes(int amount, String pigment){
 		Pigment p = getPigment(pigment);
 		int ret = -1;
@@ -49,8 +53,6 @@ public class Herb {
 	public void addPigment(Pigment p){
 		p.setOwner(this);
 		pigments.add(p);
-		DBHerb dbHerb = new DBHerb();
-		dbHerb.updateHerb(this, getName());
 	}
 	
 	public void removePigment(Pigment p){

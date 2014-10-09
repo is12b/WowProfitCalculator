@@ -71,7 +71,6 @@ public class HerbPanel extends JPanel {
 	 */
 	public HerbPanel() {
 		hCtr = new HerbCtr();
-		herbs = hCtr.getAllHerbs();
 		paths = new ArrayList<TreePath[]>();
 		selected = new ArrayList<Object>();
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -273,8 +272,8 @@ public class HerbPanel extends JPanel {
 		InkCtr iCtr = new InkCtr();
 		CompositCtr cCtr = new CompositCtr();
 		Composit comp = (Composit) tree.getLastSelectedPathComponent();
-		//Ink i = comp.getInk();
-		//cCtr.deleteComposit(, comp.getPigment());
+		Ink i = comp.getInk();
+		cCtr.deleteComposit(i);
 		iCtr.deleteInk(comp.getInk());
 		updateList();
 	}

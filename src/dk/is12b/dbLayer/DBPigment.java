@@ -56,8 +56,7 @@ public class DBPigment {
 			while(rs.next()){
 				Pigment p = new Pigment(rs.getString("NAME"), rs.getInt("CHANCETO"), rs.getInt("CHANCEOFF"), rs.getInt("PERCENT"));
 				p.setId(rs.getInt("ID"));
-				DBHerb dbh = new DBHerb();
-				p.setOwner(dbh.getHerb(rs.getInt("OWNER")));
+				p.setOwner(new Herb(rs.getInt("OWNER")));
 				pigments.add(p);
 			}
 			

@@ -34,4 +34,8 @@ public class CompositCtr {
 		return dbComp.getCompositsByPigment(p);
 	}
 
+	public void deleteComposit(Ink i) {
+		dbComp.deleteComposit(i);
+	}
+
 }

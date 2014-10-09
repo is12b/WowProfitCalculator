@@ -133,4 +133,22 @@ public class DBComposit {
 		
 		return comps;
 	}
+
+	public void deleteComposit(Ink i) {
+		DBConnection dbCon = DBConnection.getInstance();
+		Connection c = dbCon.getConnection();
+		
+		Statement stmt;
+		try{
+			stmt = c.createStatement();
+			String sql = "DELETE FROM Composit " 
+					   + "WHERE INKID = " + i.getId();
+			
+			stmt.executeUpdate(sql);
+			stmt.close();
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+	}
 }
