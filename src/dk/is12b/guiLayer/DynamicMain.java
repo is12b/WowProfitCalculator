@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 
 import dk.is12b.modelLayer.Herb;
+import dk.is12b.modelLayer.Ink;
 import dk.is12b.modelLayer.Pigment;
 
 public class DynamicMain extends JPanel {
@@ -13,30 +14,30 @@ public class DynamicMain extends JPanel {
 	/**
 	 * Create the panel.
 	 * @param amount 
+	 * @param i 
+	 * @param p 
 	 */
-	public DynamicMain(int amount, Herb h) {
+	public DynamicMain(int amount, Herb h, Pigment p, Ink i) {
 		setLayout(null);
-		
-		generatePanel(amount, h);
+		generatePanel(amount, h, p, i);
 
 	}
 	
-	private void generatePanel(int amount, Herb h){
-		ArrayList<Pigment> pigs = h.getPigments();
-		
-		if(pigs.size() > 0){
-			int y = 11;
-			for(Pigment p : pigs){
-				JLabel lblPigment = new JLabel(p.getName() + ":");
-				lblPigment.setBounds(10, y, 113, 14);
-				add(lblPigment);
-				
-				JLabel lblResult = new JLabel("" + h.getRes(amount, p.getName()));
-				lblResult.setBounds(133, y, 46, 14);
-				add(lblResult);
-				y += 20;
-			}
+	private void generatePanel(int amount, Herb h, Pigment p, Ink i){
+		JLabel lblPigment = new JLabel(p.getName() + ":");
+		lblPigment.setBounds(10, 11, 113, 14);
+		add(lblPigment);
+		String result = "";
+		try{
+			int resPigment = h.getRes(amount, p.getName());
+			int resInk = resPigment / i.getAmount();
+			result = resPigment + "/" + i.getAmount() + " = " + resInk;
+		}catch(Exception e){
+			result = "Unable to calculate!";
 		}
+		JLabel lblResult = new JLabel(result);
+		lblResult.setBounds(133, 11, 46, 14);
+		add(lblResult);
 	}
 
 }

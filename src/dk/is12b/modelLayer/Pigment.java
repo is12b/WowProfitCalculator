@@ -132,7 +132,7 @@ public class Pigment {
 	 */
 	@Override
 	public String toString() {
-		return name;
+		return id + ":" + name;
 	}
 
 	/**
