@@ -36,6 +36,8 @@ public class MainTest extends JPanel {
 	private JTextField txtAmount;
 	private JComboBox cboxPigment;
 	private JComboBox cboxInk;
+	private JTextField txtHerbPrice;
+	private JTextField txtInkPrice;
 
 	/**
 	 * Create the panel.
@@ -43,9 +45,9 @@ public class MainTest extends JPanel {
 	public MainTest() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 165, 165, 165, 276, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
 		JLabel lblHerb = new JLabel("Herb");
@@ -133,17 +135,49 @@ public class MainTest extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				if(!txtAmount.getText().isEmpty()){
 					try{
-						generatePanel((Herb)cboxHerbs.getSelectedItem(), (Pigment)cboxPigment.getSelectedItem(), (Ink)cboxInk.getSelectedItem(), Integer.parseInt(txtAmount.getText()));
+						generatePanel((Herb)cboxHerbs.getSelectedItem(), (Pigment)cboxPigment.getSelectedItem(), (Ink)cboxInk.getSelectedItem(), Integer.parseInt(txtAmount.getText()), Double.parseDouble(txtHerbPrice.getText()), Double.parseDouble(txtInkPrice.getText()));
 					}catch(Exception e){
 						e.printStackTrace();
 					}
 				}
 			}
 		});
+		
+		JLabel lblHerbPrice = new JLabel("Herb Price (AH)");
+		GridBagConstraints gbc_lblHerbPrice = new GridBagConstraints();
+		gbc_lblHerbPrice.insets = new Insets(0, 0, 5, 5);
+		gbc_lblHerbPrice.gridx = 1;
+		gbc_lblHerbPrice.gridy = 3;
+		add(lblHerbPrice, gbc_lblHerbPrice);
+		
+		JLabel lblInkPriceah = new JLabel("Ink Price (AH)");
+		GridBagConstraints gbc_lblInkPriceah = new GridBagConstraints();
+		gbc_lblInkPriceah.insets = new Insets(0, 0, 5, 5);
+		gbc_lblInkPriceah.gridx = 3;
+		gbc_lblInkPriceah.gridy = 3;
+		add(lblInkPriceah, gbc_lblInkPriceah);
+		
+		txtHerbPrice = new JTextField();
+		GridBagConstraints gbc_txtHerbPrice = new GridBagConstraints();
+		gbc_txtHerbPrice.insets = new Insets(0, 0, 5, 5);
+		gbc_txtHerbPrice.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtHerbPrice.gridx = 1;
+		gbc_txtHerbPrice.gridy = 4;
+		add(txtHerbPrice, gbc_txtHerbPrice);
+		txtHerbPrice.setColumns(10);
+		
+		txtInkPrice = new JTextField();
+		GridBagConstraints gbc_txtInkPrice = new GridBagConstraints();
+		gbc_txtInkPrice.insets = new Insets(0, 0, 5, 5);
+		gbc_txtInkPrice.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtInkPrice.gridx = 3;
+		gbc_txtInkPrice.gridy = 4;
+		add(txtInkPrice, gbc_txtInkPrice);
+		txtInkPrice.setColumns(10);
 		GridBagConstraints gbc_btnCalc = new GridBagConstraints();
 		gbc_btnCalc.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCalc.gridx = 1;
-		gbc_btnCalc.gridy = 3;
+		gbc_btnCalc.gridy = 5;
 		add(btnCalc, gbc_btnCalc);
 		
 		test = new JPanel();
@@ -152,15 +186,15 @@ public class MainTest extends JPanel {
 		gbc_test.insets = new Insets(0, 0, 0, 5);
 		gbc_test.fill = GridBagConstraints.BOTH;
 		gbc_test.gridx = 0;
-		gbc_test.gridy = 4;
+		gbc_test.gridy = 6;
 		add(test, gbc_test);
 		test.setLayout(new CardLayout(0, 0));
 
 		updateModel();
 	}
 	
-	protected void generatePanel(Herb h, Pigment p, Ink i, int amount) {
-		JPanel j = new DynamicMain(amount, h, p, i);
+	protected void generatePanel(Herb h, Pigment p, Ink i, int amount, double herbPrice, double inkPrice) {
+		JPanel j = new DynamicMain(amount, h, p, i, herbPrice, inkPrice);
 		test.add(j, h.getName());
 		CardLayout cl = (CardLayout)(test.getLayout());
 		cl.show(test, h.getName());
